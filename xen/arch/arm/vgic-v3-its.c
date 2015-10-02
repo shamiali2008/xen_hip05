@@ -543,7 +543,8 @@ static inline void vits_spin_unlock(struct vgic_its *vits)
     spin_unlock(&vits->lock);
 }
 
-static int vgic_v3_gits_mmio_read(struct vcpu *v, mmio_info_t *info)
+static int vgic_v3_gits_mmio_read(struct vcpu *v, mmio_info_t *info,
+                                  void *priv)
 {
     struct vgic_its *vits = v->domain->arch.vgic.vits;
     struct hsr_dabt dabt = info->dabt;
@@ -690,7 +691,8 @@ read_as_zero:
                          (0xffUL << GITS_BASER_ENTRY_SIZE_SHIFT)   | \
                          (0x3UL << GITS_BASER_SHAREABILITY_SHIFT)))
 
-static int vgic_v3_gits_mmio_write(struct vcpu *v, mmio_info_t *info)
+static int vgic_v3_gits_mmio_write(struct vcpu *v, mmio_info_t *info,
+                                   void *priv)
 {
     struct vgic_its *vits = v->domain->arch.vgic.vits;
     struct hsr_dabt dabt = info->dabt;
@@ -927,7 +929,8 @@ int vits_domain_init(struct domain *d)
     vits->gits_base = vits_hw.phys_base;
     vits->gits_size = vits_hw.phys_size;
 
-    register_mmio_handler(d, &vgic_gits_mmio_handler, vits->gits_base, SZ_64K);
+    register_mmio_handler(d, &vgic_gits_mmio_handler, vits->gits_base, SZ_64K,
+                          NULL);
 
     return vits_map_translation_space(d);
 }
