@@ -162,7 +162,10 @@
     DT_MATCH_COMPATIBLE("arm,cortex-a7-gic"),                       \
     DT_MATCH_COMPATIBLE("arm,gic-400")
 
-#define DT_MATCH_GIC_V3 DT_MATCH_COMPATIBLE("arm,gic-v3")
+#define DT_MATCH_GIC_V3                                             \
+    DT_MATCH_COMPATIBLE("arm,gic-v3"),                              \
+    DT_MATCH_COMPATIBLE("hisilicon,gic-v3")
+
 #define DT_MATCH_GIC_ITS DT_MATCH_COMPATIBLE("arm,gic-v3-its")
 
 #ifdef HAS_GICV3

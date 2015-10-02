@@ -685,7 +685,7 @@ static int __init gicv3_populate_rdist(void)
         void __iomem *ptr = gicv3.rdist_regions[i].map_base;
 
         reg = readl_relaxed(ptr + GICR_PIDR2) & GICR_PIDR2_ARCH_REV_MASK;
-        if ( (reg >> GICR_PIDR2_ARCH_REV_SHIFT) != GICR_PIDR2_ARCH_GICV3 )
+        if ( reg != GICR_PIDR2_ARCH_GICV3  && reg != GICR_PIDR2_ARCH_GICV4)
         {
             dprintk(XENLOG_ERR,
                     "GICv3: No redistributor present @%"PRIpaddr"\n",
@@ -1276,7 +1276,7 @@ static int __init gicv3_init(void)
         panic("GICv3: Failed to ioremap for GIC distributor\n");
 
     reg = readl_relaxed(GICD + GICD_PIDR2) & GICD_PIDR2_ARCH_REV_MASK;
-    if ( ((reg >> GICD_PIDR2_ARCH_REV_SHIFT) != GICD_PIDR2_ARCH_GICV3) )
+    if ( reg != GICD_PIDR2_ARCH_GICV3 && reg  != GICD_PIDR2_ARCH_GICV4 )
          panic("GICv3: no distributor detected\n");
 
     if ( !dt_property_read_u32(node, "#redistributor-regions",
