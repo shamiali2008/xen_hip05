@@ -48,7 +48,7 @@ static struct {
     void __iomem *map_dbase;  /* Mapped address of distributor registers */
     struct rdist_prop rdist_data;
     struct rdist_region *rdist_regions;
-    uint32_t  rdist_stride;
+    uint64_t rdist_stride;
     unsigned int rdist_count; /* Number of rdist regions count */
     unsigned int nr_priorities;
     spinlock_t lock;
@@ -1138,7 +1138,7 @@ static int gicv3_make_hwdom_dt_node(const struct domain *d,
     if ( res )
         return res;
 
-    res = fdt_property_cell(fdt, "redistributor-stride",
+    res = fdt_property_u64(fdt, "redistributor-stride",
                             d->arch.vgic.rdist_stride);
     if ( res )
         return res;
@@ -1306,7 +1306,8 @@ static int __init gicv3_init(void)
     /* The vGIC code requires the region to be sorted */
     sort(rdist_regs, gicv3.rdist_count, sizeof(*rdist_regs), cmp_rdist, NULL);
 
-    if ( !dt_property_read_u32(node, "redistributor-stride", &gicv3.rdist_stride) )
+    if ( !dt_property_read_u64(node, "redistributor-stride",
+                &gicv3.rdist_stride) )
         gicv3.rdist_stride = 0;
 
     gicv3.rdist_regions= rdist_regs;
@@ -1330,7 +1331,7 @@ static int __init gicv3_init(void)
     printk("GICv3 initialization:\n"
            "      gic_dist_addr=%#"PRIpaddr"\n"
            "      gic_maintenance_irq=%u\n"
-           "      gic_rdist_stride=%#x\n"
+           "      gic_rdist_stride=%#lx\n"
            "      gic_rdist_regions=%d\n",
            dbase, gicv3_info.maintenance_irq,
            gicv3.rdist_stride, gicv3.rdist_count);

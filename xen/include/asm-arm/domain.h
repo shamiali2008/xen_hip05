@@ -116,7 +116,7 @@ struct arch_domain
             unsigned int first_cpu;         /* First CPU handled */
         } rdist_regions[MAX_RDIST_COUNT];
         int nr_regions;                     /* Number of rdist regions */
-        uint32_t rdist_stride;              /* Re-Distributor stride */
+        uint64_t rdist_stride;              /* Re-Distributor stride */
         /* Virtual ITS */
         struct vgic_its *vits;
         uint32_t gicr_ctlr;

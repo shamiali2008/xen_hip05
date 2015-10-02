@@ -61,13 +61,13 @@ static struct {
     /* Re-distributor regions */
     unsigned int nr_rdist_regions;
     const struct rdist_region *regions;
-    uint32_t rdist_stride; /* Re-distributor stride */
+    uint64_t rdist_stride; /* Re-distributor stride */
 } vgic_v3_hw;
 
 void vgic_v3_setup_hw(paddr_t dbase,
                       unsigned int nr_rdist_regions,
                       const struct rdist_region *regions,
-                      uint32_t rdist_stride, bool_t lpi_support)
+                      uint64_t rdist_stride, bool_t lpi_support)
 {
     vgic_v3_hw.enabled = 1;
     vgic_v3_hw.lpi_support = lpi_support;
